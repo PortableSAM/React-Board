@@ -48,7 +48,9 @@ function BoardApp() {
         <tbody>
           {brdItem.map(brd => (
             <tr key={brd.id}>
-              <td>{brd.Title}</td>
+              <td>
+                <Link to={`/edit/${brd.id}`}>{brd.Title}</Link>
+              </td>
               <td>{brd.Text}</td>
               <td>{brd.Author}</td>
               <td>

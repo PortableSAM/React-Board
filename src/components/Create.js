@@ -17,6 +17,7 @@ function Create() {
     Text: text,
     CreateAt: postTime
   };
+  //각 필드 length를 기준으로 비교식 선언
   const PostLegnth = (title.length, author.length, text.length) === 0;
 
   console.log(title.length);
@@ -24,13 +25,14 @@ function Create() {
   const onCreate = event => {
     event.preventDefault();
     if (PostLegnth) {
+      //length가 0 이면 경고창 활성화 및 데이터 전송 미 실행
       console.log("error");
       alert("전송 실패");
     } else {
+      //length가 0 이 아니면 데이터 전송 실행
       const db = firebase.firestore();
       db.collection("Post").add(Post);
       alert("글 전송 완료");
-      window.location.assign("/");
     }
   };
 
@@ -65,7 +67,7 @@ function Create() {
         <button>Board List</button>
       </Link>
       <button type="submit" onClick={onCreate}>
-        Submit
+        <Link to="/">Submit</Link>
       </button>
     </div>
   );
