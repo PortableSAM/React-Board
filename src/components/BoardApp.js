@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import fire_Config from "./fireConfig/config";
+import { Link } from "react-router-dom";
+import Del from "./Del";
 
 const firebase = require("firebase/app");
 require("firebase/firestore");
@@ -13,14 +15,16 @@ function BoardApp() {
     const fetchData = () => {
       const db = firebase.firestore();
       //fireStore 실시간 리스너
-      db.collection("Post").onSnapshot(snapshot => {
-        const resData = snapshot.docs.map(doc => ({
-          ...doc.data(),
-          id: doc.id
-        }));
-        //snapshot 데이터 넘김 (to setBrdItem)
-        setBrdItem(resData);
-      });
+      db.collection("Post")
+        .orderBy("CreateAt", "desc")
+        .onSnapshot(snapshot => {
+          const resData = snapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id
+          }));
+          //snapshot 데이터 넘김 (to setBrdItem)
+          setBrdItem(resData);
+        });
     };
     return fetchData();
   }, []);
@@ -38,6 +42,7 @@ function BoardApp() {
             <th>Desc</th>
             <th>Author</th>
             <th>Date</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -49,10 +54,16 @@ function BoardApp() {
               <td>
                 {new Date(brd.CreateAt.seconds * 1000).toLocaleDateString("ko")}
               </td>
+              <td>
+                <Del brd={brd} />
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <Link to="/create">
+        <button>Add Post</button>
+      </Link>
     </div>
   );
 }
